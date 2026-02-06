@@ -271,6 +271,18 @@ function calculateResult() {
         updateResult();
     }
 }
+function tenPower() {
+    if (!currentExpression) return;
+
+    const x = parseFloat(currentExpression);
+    if (isNaN(x)) {
+        currentExpression = 'Error';
+    } else {
+        currentExpression = Math.pow(10, x).toString();
+    }
+
+    updateResult();
+}
 
 
 function applyLogarithm() {
@@ -1036,41 +1048,3 @@ function normalizeSpeech(text) {
     .split(" ")
     .filter(t => t.trim() !== "");
 }
-
-document.addEventListener('keydown', function(event) {
-    const key = event.key;
-
-    if (!isNaN(key)) { // Check if the key is a number
-        appendToResult(key);
-    } else if (key === '+' || key === '-' || key === '*' || key === '/') {
-        operatorToResult(key);
-    } else if (key === 'Enter') {
-        calculateResult();
-    } else if (key === 'Backspace') {
-        backspace();
-    } else if (key === 'Escape') {
-        clearResult();
-    } else if (key === '(' || key === ')') {
-        bracketToResult(key);
-    } else if (key === '.') {
-        appendToResult(key);
-    }else if (key === 's') {
-        trigButtonPressed('sin');
-    } else if (key === 'c') {
-        trigButtonPressed('cos');
-    } else if (key === 't') {
-        trigButtonPressed('tan');
-    }
-    else if (key === 'i') {
-        toggleInverseMode();
-    }
-    else if (key === 'A') {
-        trigButtonPressed('sin');
-    }
-    else if (key === 'C') {
-        trigButtonPressed('cos');
-    }
-    else if (key === 'T') {
-        trigButtonPressed('tan');
-    }
-});
