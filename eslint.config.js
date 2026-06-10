@@ -16,19 +16,32 @@ module.exports = [
         module: 'writable',
         require: 'readonly',
         process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
         evaluateExpression: 'readonly',
         calculatePercentage: 'readonly',
         calculateSquare: 'readonly',
         describe: 'readonly',
         it: 'readonly',
+        test: 'readonly',
         expect: 'readonly',
-        beforeEach: 'readonly'
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+        jest: 'readonly'
       }
     },
     rules: {
       'no-unused-vars': 'warn',
       'eqeqeq': 'error',
       'semi': ['error', 'always']
+    }
+  },
+  {
+    files: ['tests/**/*.js'],
+    rules: {
+      'no-unused-vars': 'off'
     }
   },
   {
