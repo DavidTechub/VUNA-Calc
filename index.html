@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUNA-Calc</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">
+            <input type="text" id="screen" readonly placeholder="0">
+        </div>
+        <div class="buttons">
+            <!-- Utility Row -->
+            <button class="utility" onclick="clearAll()">AC</button>
+            <button class="utility" onclick="clearEntry()">CE</button>
+            <button class="feature" onclick="applyPercentage()">%</button>
+            <button class="feature" onclick="applySquare()">x²</button>
+
+            <!-- Operators -->
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperator('/')">÷</button>
+
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="appendOperator('*')">×</button>
+
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="appendOperator('-')">−</button>
+
+            <button onclick="appendNumber('0')" class="zero">0</button>
+            <button onclick="appendNumber('.')">.</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+            <button class="equals" onclick="calculate()">=</button>
+        </div>
+    </div>
+    <script src="src/calculator.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
