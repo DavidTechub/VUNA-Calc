@@ -20,7 +20,7 @@ const scriptPath = path.join(__dirname, '..', 'assets', 'js', 'script.js');
 const scriptCode = fs.readFileSync(scriptPath, 'utf8');
 eval(scriptCode);
 
-describe('VUNA-Calc Engine', () => {
+describe('VUNA-Calc1 Engine', () => {
     describe('evaluateExpression', () => {
         test('adds two numbers', () => {
             expect(evaluateExpression('2 + 3')).toBe(5);
@@ -96,7 +96,7 @@ describe('VUNA-Calc Engine', () => {
     });
 });
 
-describe('VUNA-Calc DOM', () => {
+describe('VUNA-Calc1 DOM', () => {
     beforeEach(() => {
         clearAll();
     });

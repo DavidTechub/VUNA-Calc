@@ -1,6 +1,6 @@
 # VUNA-Calc
 
-![CI/CD Pipeline](https://github.com/YOUR_USERNAME/vuna-calc/actions/workflows/ci-cd.yml/badge.svg)
+![CI/CD Pipeline](https://github.com/YOUR_USERNAME/vuna-calc1/actions/workflows/ci-cd.yml/badge.svg)
 
 A production-ready calculator with full CI/CD pipeline.
 
