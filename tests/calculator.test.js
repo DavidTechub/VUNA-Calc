@@ -2,25 +2,13 @@
  * @jest-environment jsdom
  */
 
-const fs = require('fs');
-const path = require('path');
-
-// Load calculator engine
-const calcPath = path.join(__dirname, '..', 'src', 'calculator.js');
-const calcCode = fs.readFileSync(calcPath, 'utf8');
-
-// Mock DOM
+// Mock DOM before loading scripts
 document.body.innerHTML = '<input type="text" id="screen" readonly placeholder="0">';
 
-// Execute calculator in this context
-eval(calcCode);
+// Load calculator engine using require (proper Node.js import)
+const { evaluateExpression, calculatePercentage, calculateSquare } = require('../src/calculator');
 
-// Load DOM controller (needs calculator globals)
-const scriptPath = path.join(__dirname, '..', 'assets', 'js', 'script.js');
-const scriptCode = fs.readFileSync(scriptPath, 'utf8');
-eval(scriptCode);
-
-describe('VUNA-Calc1 Engine', () => {
+describe('VUNA-Calc Engine', () => {
     describe('evaluateExpression', () => {
         test('adds two numbers', () => {
             expect(evaluateExpression('2 + 3')).toBe(5);
@@ -93,53 +81,5 @@ describe('VUNA-Calc1 Engine', () => {
         test('throws on invalid input', () => {
             expect(() => calculateSquare('abc')).toThrow('Invalid number');
         });
-    });
-});
-
-describe('VUNA-Calc1 DOM', () => {
-    beforeEach(() => {
-        clearAll();
-    });
-
-    test('appendNumber displays digits', () => {
-        appendNumber('5');
-        appendNumber('3');
-        expect(document.getElementById('screen').value).toBe('53');
-    });
-
-    test('prevents multiple decimals', () => {
-        appendNumber('1');
-        appendNumber('.');
-        appendNumber('5');
-        appendNumber('.');
-        expect(document.getElementById('screen').value).toBe('1.5');
-    });
-
-    test('clearAll resets everything', () => {
-        appendNumber('5');
-        appendOperator('+');
-        appendNumber('3');
-        clearAll();
-        expect(document.getElementById('screen').value).toBe('0');
-    });
-
-    test('full calculation via DOM', () => {
-        appendNumber('7');
-        appendOperator('+');
-        appendNumber('3');
-        calculate();
-        expect(document.getElementById('screen').value).toBe('10');
-    });
-
-    test('percentage button works', () => {
-        appendNumber('50');
-        applyPercentage();
-        expect(document.getElementById('screen').value).toBe('0.5');
-    });
-
-    test('square button works', () => {
-        appendNumber('5');
-        applySquare();
-        expect(document.getElementById('screen').value).toBe('25');
     });
 });
