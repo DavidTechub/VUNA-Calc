@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use strict';
 
 /**
@@ -52,7 +53,7 @@ function calculate() {
         previousInput = '';
         shouldResetScreen = true;
         updateDisplay();
-    } catch (e) {
+        } catch {
         currentInput = 'Error';
         operator = null;
         previousInput = '';
@@ -81,7 +82,7 @@ function applyPercentage() {
         currentInput = result.toString();
         shouldResetScreen = true;
         updateDisplay();
-    } catch (e) {
+        } catch {
         currentInput = 'Error';
         updateDisplay();
     }
@@ -94,7 +95,7 @@ function applySquare() {
         currentInput = result.toString();
         shouldResetScreen = true;
         updateDisplay();
-    } catch (e) {
+        } catch {
         currentInput = 'Error';
         updateDisplay();
     }
