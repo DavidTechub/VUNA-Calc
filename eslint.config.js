@@ -1,7 +1,7 @@
 const js = require('@eslint/js');
 
 module.exports = [
-  { ignores: ['dist/', 'coverage/', 'node_modules/', 'assets/js/bootstrap.min.js', 'assets/css/'] },
+  { ignores: ['dist/', 'coverage/', 'node_modules/', 'tests/', 'assets/js/bootstrap.min.js', 'assets/css/'] },
   js.configs.recommended,
   {
     files: ['**/*.js'],
