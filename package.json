@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "build": "node scripts/build.mjs"
   },
-    "jest": {
+  "jest": {
     "testEnvironment": "jsdom",
     "collectCoverageFrom": [
       "src/**/*.js"
