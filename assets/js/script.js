@@ -1,119 +1,236 @@
-/* eslint-disable no-unused-vars */
-'use strict';
+// ===============================
+// 🧠 SMART RESULT MEMORY FEATURE
+// ===============================
 
-/**
- * VUNA-Calc DOM Controller
- * Wires buttons to the calculator engine
- */
+let LAST_RESULT = 0;
+var currentExpression = "";
 
-let currentInput = '';
-let previousInput = '';
-let operator = null;
-let shouldResetScreen = false;
+// ------------------------------
+// Theme Toggle Logic
+// ------------------------------
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById("theme-toggle");
 
-const screen = document.getElementById('screen');
+  body.classList.toggle("dark-mode");
 
-function updateDisplay() {
-    screen.value = currentInput || '0';
+  if (body.classList.contains("dark-mode")) {
+    btn.innerHTML = "☀️";
+    btn.title = "Switch to light mode";
+    localStorage.setItem("theme", "dark");
+  } else {
+    btn.innerHTML = "🌙";
+    btn.title = "Switch to dark mode";
+    localStorage.setItem("theme", "light");
+  }
 }
 
-function appendNumber(num) {
-    if (shouldResetScreen) {
-        currentInput = '';
-        shouldResetScreen = false;
+// Set theme on page load from localStorage
+window.addEventListener("DOMContentLoaded", function () {
+  const theme = localStorage.getItem("theme");
+  const body = document.body;
+  const btn = document.getElementById("theme-toggle");
+
+  if (btn) {
+    if (theme === "dark") {
+      body.classList.add("dark-mode");
+      btn.innerHTML = "☀️";
+      btn.title = "Switch to light mode";
+    } else {
+      btn.innerHTML = "🌙";
+      btn.title = "Switch to dark mode";
     }
-    if (num === '.' && currentInput.includes('.')) return;
-    if (currentInput === '0' && num !== '.') currentInput = '';
-    currentInput += num;
-    updateDisplay();
+  }
+});
+
+// ------------------------------
+// Calculator State
+// ------------------------------
+let left = "";
+let operator = "";
+let right = "";
+let steps = [];
+const MAX_STEPS = 6;
+
+// ------------------------------
+// Basic Calculator Functions
+// ------------------------------
+function appendToResult(value) {
+  currentExpression += value.toString();
+  updateResult();
 }
 
-function appendOperator(op) {
-    if (currentInput === '' && previousInput === '') return;
-    if (currentInput === '' && previousInput !== '') {
-        operator = op;
+function bracketToResult(value) {
+  currentExpression += value;
+  updateResult();
+}
+
+function backspace() {
+  currentExpression = currentExpression.slice(0, -1);
+  updateResult();
+}
+
+function operatorToResult(value) {
+  if (value === "^") {
+    currentExpression += "**";
+  } else {
+    currentExpression += value;
+  }
+  updateResult();
+}
+
+function clearResult() {
+  currentExpression = "";
+  updateResult();
+}
+
+
+function normalizeExpression(expr) {
+  return expr
+    .replace(/asin\(/g, "asinDeg(")
+    .replace(/acos\(/g, "acosDeg(")
+    .replace(/atan\(/g, "atanDeg(")
+    .replace(/sin\(/g, "sinDeg(")
+    .replace(/cos\(/g, "cosDeg(")
+    .replace(/tan\(/g, "tanDeg(")
+    .replace(/asinh\(/g, "asinh(")
+    .replace(/sinh\(/g, "sinh(")
+    .replace(/\be\b/g, "Math.E")
+    .replace(/\bpi\b/g, "Math.PI");
+}
+
+function percentToResult() {
+  if (!currentExpression) return;
+
+  const match = currentExpression.match(/(.+?)(\*\*|[+\-*/^])([0-9.]*)$/);
+
+  if (!match) {
+    const num = parseFloat(currentExpression);
+    if (isNaN(num)) return;
+
+    currentExpression = (num / 100).toString();
+  } else {
+    const leftPart = match[1];
+    const rightPart = match[3];
+
+    if (!rightPart) return;
+
+    let leftVal;
+
+    try {
+      leftVal = eval(leftPart);
+    } catch (e) {
+      leftVal = parseFloat(leftPart);
+    }
+
+    const rightVal = parseFloat(rightPart);
+    if (isNaN(leftVal) || isNaN(rightVal)) return;
+
+    const percentVal = (leftVal * rightVal) / 100;
+
+    currentExpression = percentVal.toString();
+  }
+
+  // 🔥 ADD THIS LINE
+  currentExpression += "*";
+
+  updateResult();
+}
+
+// square root
+function percentToResult() {
+  if (!currentExpression) return;
+
+  const match = currentExpression.match(/(.+?)(\*\*|[+\-*/^])([0-9.]*)$/);
+
+  if (!match) {
+    const num = parseFloat(currentExpression);
+    if (isNaN(num)) return;
+
+    currentExpression = (num / 100).toString();
+  } else {
+    const leftPart = match[1];
+    const rightPart = match[3];
+
+    if (!rightPart) return;
+
+    let leftVal;
+
+    try {
+      leftVal = eval(leftPart);
+    } catch (e) {
+      leftVal = parseFloat(leftPart);
+    }
+
+    const rightVal = parseFloat(rightPart);
+    if (isNaN(leftVal) || isNaN(rightVal)) return;
+
+    const percentVal = (leftVal * rightVal) / 100;
+
+    currentExpression = percentVal.toString();
+  }
+
+  currentExpression += "*";
+  updateResult();
+}
+
+function calculateSquareRoot() {
+    if (!currentExpression) return;
+    const value = parseFloat(currentExpression);
+    if (isNaN(value) || value < 0) {
+        currentExpression = 'Error';
+        updateResult();
         return;
     }
-    if (previousInput !== '') {
-        calculate();
-    }
-    operator = op;
-    previousInput = currentInput;
-    shouldResetScreen = true;
+    currentExpression = Math.sqrt(value).toString();
+    updateResult();
 }
 
-function calculate() {
-    if (!operator || previousInput === '' || currentInput === '') return;
+// ------------------------------
+// Calculate Result
+// ------------------------------
+function calculateExpression(expression) {
+  try {
+   
+    let normalizedExpression = normalizeExpression(expression);
 
-    try {
-        const expr = previousInput + ' ' + operator + ' ' + currentInput;
-        const result = evaluateExpression(expr);
-        currentInput = result.toString();
-        operator = null;
-        previousInput = '';
-        shouldResetScreen = true;
-        updateDisplay();
-        } catch {
-        currentInput = 'Error';
-        operator = null;
-        previousInput = '';
-        shouldResetScreen = true;
-        updateDisplay();
+    // 🧠 Replace "ans" with last result automatically
+    normalizedExpression = normalizedExpression.replace(
+      /\bans\b/gi,
+      LAST_RESULT,
+    );
+
+    // Calculate result
+    let result = eval(normalizedExpression);
+    console.log("Calculated result for expression:", expression, "->", result);
+ 
+    if (isNaN(result) || !isFinite(result)) {
+      throw new Error();
     }
+
+    return result;
+  } catch (e) {
+    return "Error";
+  }
+}
+function calculateResult() {
+  if (!currentExpression) return;
+    const display = document.getElementById("result"); 
+    // Calculate result
+    let result = calculateExpression(currentExpression);
+    result = String(result);
+
+    // Save result for future expressions
+    LAST_RESULT = result;
+
+    // Display normally
+    display.value = result;
+
+    currentExpression = result;
+    updateResult();
 }
 
-function clearEntry() {
-    currentInput = '';
-    updateDisplay();
-}
 
-function clearAll() {
-    currentInput = '';
-    previousInput = '';
-    operator = null;
-    shouldResetScreen = false;
-    updateDisplay();
+function updateResult() {
+  document.getElementById("result").value = currentExpression || "0";
 }
-
-function applyPercentage() {
-    if (currentInput === '') return;
-    try {
-        const result = calculatePercentage(currentInput);
-        currentInput = result.toString();
-        shouldResetScreen = true;
-        updateDisplay();
-        } catch {
-        currentInput = 'Error';
-        updateDisplay();
-    }
-}
-
-function applySquare() {
-    if (currentInput === '') return;
-    try {
-        const result = calculateSquare(currentInput);
-        currentInput = result.toString();
-        shouldResetScreen = true;
-        updateDisplay();
-        } catch {
-        currentInput = 'Error';
-        updateDisplay();
-    }
-}
-
-// Keyboard support
-document.addEventListener('keydown', (e) => {
-    if (e.key >= '0' && e.key <= '9') appendNumber(e.key);
-    if (e.key === '.') appendNumber('.');
-    if (['+', '-', '*', '/'].includes(e.key)) appendOperator(e.key);
-    if (e.key === 'Enter' || e.key === '=') {
-        e.preventDefault();
-        calculate();
-    }
-    if (e.key === 'Escape') clearAll();
-    if (e.key === 'Backspace') {
-        currentInput = currentInput.slice(0, -1);
-        updateDisplay();
-    }
-    if (e.key === '%') applyPercentage();
-});
