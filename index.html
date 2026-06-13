@@ -15,19 +15,15 @@
     title="Toggle dark/light mode">
     🌙
   </button>
-  
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-6 col-md-6 col-sm-8">
-        
-        <!-- Header -->
-        <div class="border border-dotted border-3 rounded-3 p-3 mb-4" style="background-color: white !important;">
+        <div class="border border-dotted border-3 rounded-3 p-3 mb-4" style="background-color: #ff0000;">
           <h4 class="text-center group-header mb-0">VUNA CALCULATOR</h4>
           <p class="text-center text-small text-muted">
             <i>Created by set 2025/26 Software Engineering</i>
           </p>
         </div>
-        
         <div class="row">
           <div class="col-md-12">
             <div class="card calculator-card">
@@ -41,31 +37,49 @@
                     <button class="btn btn-light" onclick="bracketToResult('(')">(</button>
                     <button class="btn btn-light" onclick="bracketToResult(')')">)</button>
                     <button class="btn btn-light" onclick="backspace()">←</button>
+
+                    <!-- Row trig -->
                     <button class="btn btn-action" onclick="clearResult()">AC</button>
 
+                    <!-- Row 2 -->
                     <button class="btn btn-light" onclick="appendToResult(7)">7</button>
                     <button class="btn btn-light" onclick="appendToResult(8)">8</button>
                     <button class="btn btn-light" onclick="appendToResult(9)">9</button>
-                    <button class="btn btn-operator" onclick="operatorToResult('/')">÷</button>
 
+                    <!-- Row 3 -->
+                    <button class="btn btn-operator" onclick="operatorToResult('/')">÷</button>
                     <button class="btn btn-light" onclick="appendToResult(4)">4</button>
                     <button class="btn btn-light" onclick="appendToResult(5)">5</button>
                     <button class="btn btn-light" onclick="appendToResult(6)">6</button>
-                    <button class="btn btn-operator" onclick="operatorToResult('*')">×</button>
 
+                    <!-- Row 4 -->
+                    <button class="btn btn-operator" onclick="operatorToResult('*')">×</button>
                     <button class="btn btn-light" onclick="appendToResult(1)">1</button>
                     <button class="btn btn-light" onclick="appendToResult(2)">2</button>
                     <button class="btn btn-light" onclick="appendToResult(3)">3</button>
+
+
+
                     <button class="btn btn-operator" onclick="calculateSquareRoot()">√</button>
 
+                    <!-- Row 5 -->
                     <button class="btn btn-operator" onclick="operatorToResult('+')">+</button>
                     <button class="btn btn-light" onclick="appendToResult('.')">.</button>
                     <button class="btn btn-light" onclick="appendToResult(0)">0</button>
                     <button class="btn btn-operator" onclick="percentToResult('%')">%</button>
                     
+                    <!-- Row 9 -->
                     <button class="btn btn-operator" onclick="operatorToResult('-')">−</button>
 
                     <button class="btn btn-equals" onclick="calculateResult()" style="grid-column: span 4;">=</button>
+
+
+
+                    
+
+
+
+
                   </div>
                 </div>
               </div>
@@ -78,8 +92,7 @@
           <button id="scroll-to-calculator" title="Back to Calculator">↑</button>
         </div>
       </div>
-    </div>
-  </div>
 </body>
 
 </html>
+
